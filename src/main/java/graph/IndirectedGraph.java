@@ -9,7 +9,7 @@ public class IndirectedGraph<T> implements Graph<T> {
     protected List<Vertex<T>> vertices = new ArrayList<>();
 
     public void addVertex(Vertex<T> vertex) {
-        if (vertex.isDirected() == false && vertex != null) {
+        if (!vertex.isDirected()) {
             vertices.add(vertex);
         }
     }
@@ -28,7 +28,7 @@ public class IndirectedGraph<T> implements Graph<T> {
     public void addEdge(Vertex<T> v1, Vertex<T> v2) {
 
         if (!isValidVertex(v1) || !isValidVertex(v2)) {
-            // TODO: log and throw an exception
+            System.out.println("addEdge: Invalid vertexes: " + v1 + ", " + v2);
             return;
         }
 
@@ -39,7 +39,7 @@ public class IndirectedGraph<T> implements Graph<T> {
     public List<Vertex<T>> getPath(Vertex<T> source, Vertex<T> destination) {
 
         if (!isValidVertex(source) || !isValidVertex(destination)) {
-            // TODO: log and throw an exception
+            System.out.println("getPath: Incorrect arguments: " + source + ", " + destination);
             return null;
         }
 
@@ -56,12 +56,14 @@ public class IndirectedGraph<T> implements Graph<T> {
             return path;
         }
 
-        return traverse(path, destination);
+        List<Vertex<T>> deadEndVertices = new ArrayList<>();
+
+        return traverse(path, destination, deadEndVertices);
     }
 
-    public LinkedList<Vertex<T>> traverse(LinkedList<Vertex<T>> path, Vertex<T> destination) {
+    public LinkedList<Vertex<T>> traverse(LinkedList<Vertex<T>> path, Vertex<T> destination, List<Vertex<T>> deadEndVertices) {
 
-        System.out.println(path);
+        System.out.println("Traverse: depth=" + path.size() + " " + path);
 
         if (path.contains(destination)) {
             return path;
@@ -69,10 +71,12 @@ public class IndirectedGraph<T> implements Graph<T> {
 
         // Find all neighbors that aren't already part of the path
         List<Vertex<T>> steps = path.getLast().getOutboundNeighbors();
+
         steps.removeAll(path);
 
         if (steps.isEmpty()) {
-            path.removeLast();
+            Vertex<T> deadEndVertex = path.removeLast();
+            deadEndVertices.add(deadEndVertex);
             return path;
         }
 
@@ -81,7 +85,7 @@ public class IndirectedGraph<T> implements Graph<T> {
         // Traverse recursively for each new step
         for (Vertex<T> step : steps) {
             nPath.add(step);
-            nPath = traverse(nPath, destination);
+            nPath = traverse(nPath, destination, deadEndVertices);
             if (nPath != null && nPath.contains(destination)) {
                 break;
             }

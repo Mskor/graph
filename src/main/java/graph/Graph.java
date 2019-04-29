@@ -1,5 +1,6 @@
 package graph;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public interface Graph<T> {

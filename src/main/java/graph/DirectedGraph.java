@@ -1,5 +1,6 @@
 package graph;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class DirectedGraph<T> extends IndirectedGraph<T> {
     @Override
     public void addEdge(Vertex<T> v1, Vertex<T> v2) {
         if (!isValidVertex(v1) || !isValidVertex(v2)) {
-            // TODO: log and throw an exception
+            System.out.println("addEdge: Invalid vertexes: " + v1 + ", " + v2);
             return;
         }
 
@@ -35,7 +36,7 @@ public class DirectedGraph<T> extends IndirectedGraph<T> {
     public List<Vertex<T>> getPath(Vertex<T> source, Vertex<T> destination) {
 
         if (!isValidVertex(source) || !isValidVertex(destination)) {
-            // TODO: log and throw an exception
+            System.out.println("getPath: Incorrect arguments: " + source + ", " + destination);
             return null;
         }
 
@@ -47,14 +48,16 @@ public class DirectedGraph<T> extends IndirectedGraph<T> {
         LinkedList<Vertex<T>> path = new LinkedList<>();
         path.add(source);
 
-        LinkedList<Vertex<T>> result = traverse(path, destination);
+        List<Vertex<T>> deadEndVertices = new ArrayList<>();
+
+        LinkedList<Vertex<T>> result = traverse(path, destination, deadEndVertices);
 
         // For directed graph any path should be at least
         // 2 vertices long. 1 means no path.
         if(result.size() == 1) {
-            return null;
+            return new LinkedList<>();
         } else {
-            return path;
+            return result;
         }
 
     }

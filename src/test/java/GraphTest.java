@@ -18,6 +18,7 @@ public class GraphTest {
     private IndirectedGraph<Integer> indirectedGraph;
 
     private LinkedList<Vertex<Integer>> indirectedTestPath17;
+    private LinkedList<Vertex<Integer>> directedTestPath16;
 
     @Before
     public void init() {
@@ -65,11 +66,12 @@ public class GraphTest {
         directedGraph.addEdge(vo2, vo5);
         directedGraph.addEdge(vo5, vo6);
 
-        List<Vertex<Integer>> path1 = directedGraph.getPath(v1, v2);
-        List<Vertex<Integer>> path2 = directedGraph.getPath(v2, v3);
-        System.out.println(path1);
+        directedTestPath16 = new LinkedList<>();
 
-        // TODO: verify object construction is correct
+        directedTestPath16.add(vo1);
+        directedTestPath16.add(vo2);
+        directedTestPath16.add(vo5);
+        directedTestPath16.add(vo6);
     }
 
     @After
@@ -87,6 +89,8 @@ public class GraphTest {
         Vertex<Integer> v1 = vertices.get(random.nextInt(vertices.size()));
         Vertex<Integer> v2 = vertices.get(random.nextInt(vertices.size()));
 
+        System.out.println("Indirected random path test: " + v1 + " -> " + v2);
+
         List<Vertex<Integer>> path = indirectedGraph.getPath(v1, v2);
         // Path should always exist since test graph is connected
         Assert.assertNotNull(path);
@@ -97,10 +101,10 @@ public class GraphTest {
         v1 = vertices.get(random.nextInt(vertices.size()));
         v2 = vertices.get(random.nextInt(vertices.size()));
 
-        List<Vertex<Integer>> path1 = directedGraph.getPath(v1, v2);
-        System.out.println(path1);
+        System.out.println("Directed random path test: " + v1 + " -> " + v2);
 
-        // TODO: verify random path no exceptions
+        List<Vertex<Integer>> path1 = directedGraph.getPath(v1, v2);
+        System.out.println("Random path test; indirected graph path: " + (path1.isEmpty() ? "is not found" : path1));
     }
 
     @Test
@@ -114,5 +118,15 @@ public class GraphTest {
         System.out.println("resulting path v1 -> v7: " + path);
         System.out.println("True path: " + indirectedTestPath17);
         Assert.assertEquals(path, indirectedTestPath17);
+
+        vertices = directedGraph.getVertices();
+
+        v1 = vertices.get(0);
+        v2 = vertices.get(5);
+
+        path = directedGraph.getPath(v1, v2);
+        System.out.println("resulting path v1 -> v6: " + path);
+        System.out.println("True path: " + directedTestPath16);
+        Assert.assertEquals(path, directedTestPath16);
     }
 }

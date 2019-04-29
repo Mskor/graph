@@ -18,8 +18,8 @@ public class DirectedVertex<T> extends Vertex<T> {
 
     public void addNeighbor(Vertex<T> v, DIRECTION direction) {
         if(v == null || direction == null) {
+            System.out.println("addNeighbor: Incorrect arguments: " + v + ", " + direction);
             return;
-            // TODO: throw an exception
         }
 
         if (direction.equals(DIRECTION.INBOUND)) {

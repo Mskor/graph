@@ -20,7 +20,7 @@ public class IndirectedVertex<T> extends Vertex<T> {
         if(v.isDirected() == isDirected() && direction == null) {
             neighbors.add(v);
         } else {
-            // TODO: throw an exception
+            System.out.println("addNeighbor: Incorrect arguments: " + v + ", " + direction);
         }
     }
 
